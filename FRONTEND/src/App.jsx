@@ -6,7 +6,7 @@ function App() {
     const [formations, setFormations] = useState([]);
     
     useEffect(() => {
-        fetch("https://api.maceratshub.onrender.com/formations")
+        fetch("https://macerat-s-backend.onrender.com/formations")
             .then(res => res.json())
             .then(data => setFormations(data));
     }, []);

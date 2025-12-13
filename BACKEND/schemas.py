@@ -1,31 +1,49 @@
-from pydantic import BaseModel
-from typing import Optional
+# backend/schemas.py
+from pydantic import BaseModel, EmailStr
+from typing import Optional, List
+from datetime import datetime
 
-# Utilisateur pour inscription et login
 class UserCreate(BaseModel):
-    email: str
+    email: EmailStr
     password: str
+    role: Optional[str] = "user"   # user, instructor, admin, superadmin
+    name: Optional[str] = None
 
 class UserOut(BaseModel):
     id: Optional[str]
-    email: str
+    email: EmailStr
+    role: str
+    name: Optional[str]
 
-# Formation
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
 class FormationCreate(BaseModel):
     title: str
     description: str
+    price: Optional[float] = 0.0
+    tags: Optional[List[str]] = []
 
-class FormationOut(BaseModel):
+class FormationOut(FormationCreate):
     id: Optional[str]
+
+class ProjectCreate(BaseModel):
     title: str
     description: str
+    cover_url: Optional[str] = None
+    tags: Optional[List[str]] = []
 
-# Inscription à une formation
-class EnrollmentCreate(BaseModel):
-    user_email: str
-    formation_id: str
-
-class EnrollmentOut(BaseModel):
+class ProjectOut(ProjectCreate):
     id: Optional[str]
-    user_email: str
+
+class EnrollmentCreate(BaseModel):
+    user_email: EmailStr
     formation_id: str
+    created_at: Optional[datetime] = None
+
+class LogEntry(BaseModel):
+    actor: str
+    action: str
+    resource: Optional[str] = None
+    timestamp: Optional[datetime] = None

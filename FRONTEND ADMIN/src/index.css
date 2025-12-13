@@ -1,0 +1,50 @@
+/* Tailwind core */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   Styles globaux – Admin
+   ========================= */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Titres sobres */
+h1 {
+  @apply text-2xl font-semibold;
+}
+
+h2 {
+  @apply text-xl font-semibold;
+}
+
+h3 {
+  @apply text-lg font-medium;
+}
+
+/* Formulaires cohérents */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+}
+
+/* Suppression effets navigateurs */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}

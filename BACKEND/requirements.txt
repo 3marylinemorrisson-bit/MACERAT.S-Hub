@@ -1,8 +1,15 @@
 fastapi
 uvicorn
+<<<<<<< Updated upstream
 python-jose
 passlib[bcrypt]
 pydantic
 pymongo
 motor
 python-dotenv
+=======
+pydantic[email]
+motor
+python-dotenv
+bcrypt
+>>>>>>> Stashed changes

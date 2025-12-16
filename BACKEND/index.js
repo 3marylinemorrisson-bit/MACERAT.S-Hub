@@ -14,6 +14,16 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Backend MACERAT.S opérationnel !" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    return res.json({ token: 'ADMIN_TOKEN_OK' });
+  }
+
+  return res.status(401).json({ error: 'Identifiants invalides' });
+});
+
+app.listen(10000, () => {
+  console.log('Server running on port 10000');
 });

@@ -1,6 +1,5 @@
-// src/App.js
 import React, { useState } from "react";
-import { login } from "./api";
+import { login, checkAdmin } from "./api";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -9,45 +8,54 @@ function App() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage("");
-
+    setMessage("Connexion en cours...");
     try {
-      const data = await login(email, password);
-      setMessage("✅ Connexion réussie ! Token : " + data.token);
+      const result = await login(email, password);
+      localStorage.setItem("adminToken", result.token);
+      setMessage("✅ Connexion réussie !");
     } catch (err) {
-      setMessage("❌ Identifiants invalides ou backend inaccessible");
+      setMessage("❌ " + err.message);
+    }
+  };
+
+  const handleCheckAdmin = async () => {
+    try {
+      const result = await checkAdmin();
+      setMessage(result.ok ? "✅ Accès admin confirmé" : "❌ Accès refusé");
+    } catch (err) {
+      setMessage("❌ " + err.message);
     }
   };
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
-      <h1>Connexion Admin</h1>
-      {message && <p>{message}</p>}
+      <h2>Connexion Admin</h2>
       <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: 10 }}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: 8 }}
-            required
-          />
-        </div>
-        <button type="submit" style={{ padding: "8px 16px" }}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ width: "100%", padding: 8, marginBottom: 10 }}
+        />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{ width: "100%", padding: 8, marginBottom: 10 }}
+        />
+        <button type="submit" style={{ width: "100%", padding: 8 }}>
           Se connecter
         </button>
       </form>
+      <button
+        onClick={handleCheckAdmin}
+        style={{ marginTop: 10, width: "100%", padding: 8 }}
+      >
+        Vérifier accès admin
+      </button>
+      <p>{message}</p>
     </div>
   );
 }

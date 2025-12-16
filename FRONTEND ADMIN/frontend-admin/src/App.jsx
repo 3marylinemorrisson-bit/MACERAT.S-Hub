@@ -8,11 +8,11 @@ function App() {
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Vérification du backend au chargement
+  // VÃ©rification du backend au chargement
   useEffect(() => {
     testBackend()
       .then(data => setBackendStatus(data.message))
-      .catch(() => setBackendStatus('❌ Backend non accessible'));
+      .catch(() => setBackendStatus('âŒ Backend non accessible'));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -20,20 +20,20 @@ function App() {
     setError('');
     try {
       const data = await login(email, password);
-      console.log('Connexion réussie:', data);
+      console.log('Connexion rÃ©ussie:', data);
       setIsLoggedIn(true);
     } catch {
       setError('Email ou mot de passe incorrect');
     }
   };
 
-  // Dashboard simulé après connexion
+  // Dashboard simulÃ© aprÃ¨s connexion
   if (isLoggedIn) {
     return (
       <div style={{ padding: '40px' }}>
         <h1>Bienvenue dans le Dashboard Admin</h1>
         <p>{backendStatus}</p>
-        <p>Vous êtes connecté(e) en tant que <b>{email}</b></p>
+        <p>Vous Ãªtes connectÃ©(e) en tant que <b>{email}</b></p>
       </div>
     );
   }
@@ -72,3 +72,4 @@ function App() {
 }
 
 export default App;
+

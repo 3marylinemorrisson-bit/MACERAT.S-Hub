@@ -14,3 +14,4 @@ export async function login(email, password) {
   if (!res.ok) throw new Error('Login failed');
   return res.json();
 }
+

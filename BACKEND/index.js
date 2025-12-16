@@ -15,6 +15,7 @@ const PORT = 5000;
 // ⚠️ Identifiants admin temporaires
 const ADMIN_EMAIL = "admin@macerat.s";
 const ADMIN_PASSWORD = "admin123";
+const ADMIN_TOKEN = "MACERAT_ADMIN_TOKEN";
 
 // ✅ Route test simple
 app.get("/api/test", (req, res) => {
@@ -35,6 +36,7 @@ app.post("/api/login", (req, res) => {
 // 🔒 Exemple route protégée
 app.get("/api/admin-check", (req, res) => {
   const auth = req.headers.authorization;
+  console.log("Authorization header reçu:", auth); // <-- DEBUG
   if (auth === "Bearer MACERAT_ADMIN_TOKEN") {
     return res.json({ ok: true });
   }

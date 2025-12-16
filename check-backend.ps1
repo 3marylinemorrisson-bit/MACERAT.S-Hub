@@ -1,25 +1,25 @@
-# check-backend.ps1
+# check-backend.ps1 - version propre UTF-8 sans BOM
 
-# Chemin du backend (adapter si nécessaire)
 $backendPath = "C:\Users\user\Desktop\MACERAT.S\PLATEFORM MACERATS\MACERAT.S-Hub\BACKEND"
 
-Write-Host "🚀 Lancement du backend sur le port 5000..." -ForegroundColor Cyan
+function Start-Backend {
+    Write-Host "🔹 Vérification du backend..."
 
-# Lancer Node.js en arrière-plan
-$backendProcess = Start-Process "node" "$backendPath\index.js" -PassThru
+    $backendProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "*$backendPath*" }
 
-# Attendre que le serveur démarre
-Start-Sleep -Seconds 2
-
-# Tester la route /api/test
-$testUrl = "http://localhost:5000/api/test"
-
-try {
-    $response = Invoke-RestMethod -Uri $testUrl -Method Get -TimeoutSec 5
-    Write-Host "✅ Backend accessible ! Message reçu : $($response.message)" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Backend non accessible sur $testUrl" -ForegroundColor Red
-    Write-Host "   Vérifie si Node.js écoute bien le port 5000 et que le firewall n'empêche pas les connexions locales."
+    if ($backendProcess) {
+        Write-Host "✅ Backend déjà en cours d'exécution. PID: $($backendProcess.Id)" -ForegroundColor Green
+    } else {
+        Write-Host "📦 Lancement du backend..."
+        Start-Process "npm" "start" -WorkingDirectory $backendPath
+        Start-Sleep -Seconds 3
+        $backendProcess = Get-Process -Name "node" -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "*$backendPath*" }
+        if ($backendProcess) {
+            Write-Host "✅ Backend lancé avec succès. PID: $($backendProcess.Id)" -ForegroundColor Green
+        } else {
+            Write-Host "❌ Impossible de lancer le backend." -ForegroundColor Red
+        }
+    }
 }
 
-Write-Host "🔹 Backend en cours d'exécution. PID: $($backendProcess.Id)" -ForegroundColor Yellow
+Start-Backend

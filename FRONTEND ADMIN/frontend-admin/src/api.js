@@ -1,0 +1,22 @@
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+export async function login(email, password) {
+  const res = await fetch(`${API_URL}/api/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!res.ok) throw new Error("Identifiants invalides");
+  return res.json();
+}
+
+export async function checkAdmin(token) {
+  const res = await fetch(`${API_URL}/api/admin-check`, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) throw new Error("Accès refusé");
+  return res.json();
+}

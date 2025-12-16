@@ -29,9 +29,9 @@ function Start-NodeProcess {
 
     # Lancer le process
     Write-Host "🚀 Lancement du Node process dans $Path..."
-    $proc = Start-Process "npm" "start" -WorkingDirectory $Path -PassThru
+    $proc = Start-Process "npm" -ArgumentList "start" -WorkingDirectory $Path -PassThru
     Start-Sleep -Seconds 5
-    Write-Host "✅ Node process lancé. PID: $($proc.Id)" -ForegroundColor Green
+    Write-Host ("✅ Node process lancé. PID: {0}" -f $proc.Id) -ForegroundColor Green
     return $proc
 }
 
@@ -41,6 +41,6 @@ $backendProcess = Start-NodeProcess -Path $backendPath
 # Lancement frontend
 $frontendProcess = Start-NodeProcess -Path $frontendPath
 
-Write-Host "`n🎉 Backend et Frontend sont en cours d'exécution !" -ForegroundColor Cyan
+Write-Host "✅ Backend et Frontend sont en cours d'exécution !" -ForegroundColor Cyan
 Write-Host "Backend: http://localhost:5000/api/test"
 Write-Host "Frontend: http://localhost:3000"

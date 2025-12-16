@@ -1,6 +1,22 @@
 ﻿import React, { useState, useEffect } from "react";
 import { login, checkAdmin } from "./api";
 import AdminPage from "./AdminPage";
+import { login, checkAdmin } from './api';
+
+async function handleLogin(email, password) {
+  try {
+    await login(email, password);
+
+    // Vérifier immédiatement l’accès admin
+    const adminData = await checkAdmin();
+    console.log('✅ Accès admin confirmé :', adminData);
+    alert('Connexion Admin réussie !');
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message); // Affiche "Accès admin refusé" si le token est incorrect
+  }
+}
 
 function App() {
   const [email, setEmail] = useState("");

@@ -1,4 +1,4 @@
-﻿const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+﻿const API_URL = 'http://localhost:5000';
 
 export async function testBackend() {
   const res = await fetch(`${API_URL}/api/test`);
@@ -11,8 +11,7 @@ export async function login(email, password) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
+
   if (!res.ok) throw new Error('Login failed');
   return res.json();
 }
-
-

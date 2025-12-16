@@ -1,31 +1,32 @@
-# run-macerat.ps1
-# Script pour lancer backend et frontend MACERAT.S
+# ==============================
+# MACERAT.S - RUN ALL SCRIPT
+# ==============================
 
-$projectPath = "C:\Users\user\Desktop\MACERAT.S\PLATEFORM MACERATS\MACERAT.S-Hub"
-$backendPath = "$projectPath\BACKEND"
-$frontendPath = "$projectPath\FRONTEND ADMIN\frontend-admin"
+$rootPath = Split-Path -Parent $MyInvocation.MyCommand.Path
+$backendPath = Join-Path $rootPath "BACKEND"
+$frontendPath = Join-Path $rootPath "FRONTEND ADMIN\frontend-admin"
 
-function Start-NodeProcess {
-    param (
-        [string]$path,
-        [string]$script = "start"
-    )
+function Start-NodeApp($path) {
+    Write-Host "-----------------------------------"
+    Write-Host "Starting app in $path"
+    Write-Host "-----------------------------------"
 
     Set-Location $path
 
     if (!(Test-Path "node_modules")) {
-        Write-Host "Installing dependencies in $path..."
+        Write-Host "Installing dependencies..."
         npm install
     }
 
-    Write-Host "Launching $path..."
-    Start-Process "npm" $script
+    Start-Process powershell -ArgumentList "npm start"
 }
 
-# Lancer le backend
-Start-NodeProcess -path $backendPath
+# Start Backend
+Start-NodeApp $backendPath
 
-# Lancer le frontend
-Start-NodeProcess -path $frontendPath
+# Start Frontend
+Start-NodeApp $frontendPath
 
-Write-Host "Backend and Frontend are running." -ForegroundColor Green
+Write-Host "==================================="
+Write-Host "BACKEND and FRONTEND are running"
+Write-Host "==================================="

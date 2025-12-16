@@ -7,32 +7,22 @@ app.use(express.json());
 
 const PORT = 5000;
 
-// ⚠️ IDENTIFIANTS ADMIN (TEMPORAIRE)
+// ⚠️ Admin temporaire
 const ADMIN_EMAIL = "admin@macerat.s";
 const ADMIN_PASSWORD = "admin123";
 
-// 🔐 LOGIN
-app.post("/api/login", (req, res) => {
-  const { email, password } = req.body;
-
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    return res.json({
-      token: "MACERAT_ADMIN_TOKEN",
-    });
-  }
-
-  return res.status(401).json({ error: "Identifiants invalides" });
+// Test route
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend MACERAT.S opérationnel !" });
 });
 
-// 🔒 ROUTE PROTÉGÉE
-app.get("/api/admin-check", (req, res) => {
-  const auth = req.headers.authorization;
-
-  if (auth === "Bearer MACERAT_ADMIN_TOKEN") {
-    return res.json({ ok: true });
+// Login route
+app.post("/api/login", (req, res) => {
+  const { email, password } = req.body;
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    return res.json({ token: "MACERAT_ADMIN_TOKEN" });
   }
-
-  return res.status(403).json({ error: "Accès refusé" });
+  return res.status(401).json({ error: "Identifiants invalides" });
 });
 
 app.listen(PORT, () => {

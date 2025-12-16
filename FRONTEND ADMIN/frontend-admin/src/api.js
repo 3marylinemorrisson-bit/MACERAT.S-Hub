@@ -1,22 +1,40 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
+// 🔐 LOGIN
 export async function login(email, password) {
   const res = await fetch(`${API_URL}/api/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
 
-  if (!res.ok) throw new Error("Identifiants invalides");
-  return res.json();
+  if (!res.ok) throw new Error('Login failed');
+
+  const data = await res.json();
+
+  // ✅ STOCKAGE IMMEDIAT
+  localStorage.setItem('adminToken', data.token);
+
+  return data;
 }
 
-export async function checkAdmin(token) {
+// 🔒 CHECK ADMIN
+export async function checkAdmin() {
+  const token = localStorage.getItem('adminToken');
+
+  if (!token) {
+    throw new Error('Pas de token stocké');
+  }
+
   const res = await fetch(`${API_URL}/api/admin-check`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
-  if (!res.ok) throw new Error("Accès refusé");
+  if (!res.ok) {
+    throw new Error('Accès admin refusé');
+  }
+
   return res.json();
 }

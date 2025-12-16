@@ -1,34 +1,31 @@
-# ---------------------------------------------------
-# Script tout-en-un MACERAT.S
-# ---------------------------------------------------
+# run-macerat.ps1
+# Script pour lancer backend et frontend MACERAT.S
 
-# Chemins vers les dossiers
-$backendDir = "C:\Users\user\Desktop\MACERAT.S\PLATEFORM MACERATS\MACERAT.S-Hub\BACKEND"
-$frontendDir = "C:\Users\user\Desktop\MACERAT.S\PLATEFORM MACERATS\MACERAT.S-Hub\FRONTEND ADMIN\frontend-admin"
+$projectPath = "C:\Users\user\Desktop\MACERAT.S\PLATEFORM MACERATS\MACERAT.S-Hub"
+$backendPath = "$projectPath\BACKEND"
+$frontendPath = "$projectPath\FRONTEND ADMIN\frontend-admin"
 
-# Port backend
-$backendPort = 10000
-$backendUrl = "http://localhost:$backendPort/api/test"
+function Start-NodeProcess {
+    param (
+        [string]$path,
+        [string]$script = "start"
+    )
 
-Write-Host "🚀 Démarrage du backend..." -ForegroundColor Cyan
-Start-Process "powershell" -ArgumentList "-NoExit","-Command","cd `"$backendDir`"; npm start"
+    Set-Location $path
 
-Start-Sleep -Seconds 5
+    if (!(Test-Path "node_modules")) {
+        Write-Host "Installing dependencies in $path..."
+        npm install
+    }
 
-# Vérification backend
-Write-Host "🔍 Vérification du backend..."
-try {
-    $response = Invoke-RestMethod -Uri $backendUrl -Method Get -TimeoutSec 5
-    Write-Host "✅ Backend accessible : $($response.message)" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Backend non accessible sur $backendUrl" -ForegroundColor Red
-    Write-Host "⚠️ Vérifie que le serveur backend tourne correctement avant de lancer le frontend." -ForegroundColor Yellow
-    exit
+    Write-Host "Launching $path..."
+    Start-Process "npm" $script
 }
 
-# Lancement frontend
-Write-Host "🚀 Démarrage du frontend..." -ForegroundColor Cyan
-Start-Process "powershell" -ArgumentList "-NoExit","-Command","cd `"$frontendDir`"; npm start"
+# Lancer le backend
+Start-NodeProcess -path $backendPath
 
-Write-Host "🎯 MACERAT.S : Backend et Frontend en cours d'exécution." -ForegroundColor Green
-Write-Host "🖥 Ouvre ton navigateur sur http://localhost:3000 pour tester la connexion admin."
+# Lancer le frontend
+Start-NodeProcess -path $frontendPath
+
+Write-Host "Backend and Frontend are running." -ForegroundColor Green
